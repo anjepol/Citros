@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citros S.A. de C.V. | Innovación</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;800&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* --- PALETA CITROS TECH --- */
+        :root {
+            --citros-lime: #7DA819;
+            --citros-mid: #629917;
+            --citros-deep: #2D730D;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--citros-mid);
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .heading-font { font-family: 'Outfit', sans-serif; }
+
+        /* --- FONDO AERO TECH (Abstracto, no natural) --- */
+        .aero-bg {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2;
+            /* Degradado técnico lineal */
+            background: linear-gradient(135deg, #4b7a0e 0%, #2D730D 50%, #1a3a05 100%);
+        }
+
+        /* Malla de luz (Grid) para dar toque de ingeniería */
+        .tech-grid {
+            position: absolute; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+        }
+
+        /* Luces Ambientales (Glows) */
+        .glow {
+            position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.5;
+            animation: pulseGlow 10s infinite alternate;
+        }
+        .g1 { top: -20%; left: -10%; width: 60vw; height: 60vw; background: radial-gradient(circle, var(--citros-lime), transparent); }
+        .g2 { bottom: -20%; right: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, #a3e635, transparent); animation-delay: -5s; }
+
+        @keyframes pulseGlow { 0% { opacity: 0.3; transform: scale(1); } 100% { opacity: 0.6; transform: scale(1.1); } }
+
+        /* --- HYPER GLASSMORPHISM (Cristal Grueso) --- */
+        .glass-panel {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            /* Bordes iluminados para efecto 3D */
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-top: 1px solid rgba(255, 255, 255, 0.5);
+            border-left: 1px solid rgba(255, 255, 255, 0.5);
+            /* Sombra interna para volumen */
+            box-shadow: 
+                0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                inset 0 0 20px rgba(255, 255, 255, 0.05);
+            border-radius: 30px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .glass-panel:hover {
+            transform: translateY(-8px) scale(1.01);
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
+            box-shadow: 
+                0 30px 60px -12px rgba(0, 0, 0, 0.6),
+                inset 0 0 20px rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* --- BOTONES GLOSSY (Estilo Frutiger Aero) --- */
+        .btn-glossy {
+            background: linear-gradient(180deg, #ffffff 0%, #e2e8f0 49%, #cbd5e1 50%, #94a3b8 100%);
+            color: var(--citros-deep); font-weight: 800; border-radius: 99px;
+            border: 1px solid white;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3), inset 0 2px 5px white;
+            position: relative; overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        /* Brillo especular superior */
+        .btn-glossy::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 45%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.9), rgba(255,255,255,0.1));
+            border-radius: 99px 99px 40px 40px;
+        }
+
+        .btn-glossy:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.6);
+        }
+
+        .btn-outline {
+            border: 2px solid rgba(255,255,255,0.5); color: white;
+            font-weight: 700; border-radius: 99px;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(5px);
+            transition: all 0.2s;
+        }
+        .btn-outline:hover {
+            background: white; color: var(--citros-deep); border-color: white;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+
+        /* --- MENÚ --- */
+        .nav-pill {
+            padding: 0.5rem 1.2rem; border-radius: 99px; font-weight: 600; font-size: 0.9rem;
+            color: rgba(255,255,255,0.8); transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+        .nav-pill:hover, .nav-pill.active {
+            background: rgba(255,255,255,0.2); color: white;
+            border-color: rgba(255,255,255,0.3);
+            box-shadow: 0 0 15px rgba(255,255,255,0.2);
+            text-shadow: 0 0 10px white;
+        }
+
+        /* --- LOGO 3D CSS --- */
+        .logo-box {
+            background: linear-gradient(135deg, #ffffff 0%, #d1d5db 100%);
+            box-shadow: 
+                inset 0 2px 5px rgba(255,255,255,1),
+                0 5px 15px rgba(0,0,0,0.3);
+            color: var(--citros-deep);
+        }
+
+        /* Mobile Menu */
+        #mobile-menu { transition: transform 0.3s; transform: translateX(100%); }
+        #mobile-menu.open { transform: translateX(0); }
+    </style>
+</head>
+<body>
+
+    <!-- FONDO TECNOLÓGICO -->
+    <div class="aero-bg">
+        <div class="tech-grid"></div>
+        <div class="glow g1"></div>
+        <div class="glow g2"></div>
+    </div>
+
+    <!-- NAVBAR (Cristal Flotante) -->
+    <nav class="fixed top-6 left-0 right-0 z-50 flex justify-center px-4">
+        <div class="glass-panel !rounded-full px-6 py-3 flex items-center justify-between w-full max-w-6xl !bg-white/10 !border-white/30">
+            
+            <a href="index.html" class="flex items-center gap-3 group">
+                <!-- Logo Tech -->
+                <div class="w-12 h-12">
+                    <img src="logo_principal.png" alt="logo">
+                </div>
+                <div class="hidden sm:block">
+                    <span class="block font-bold heading-font text-xl leading-none text-white drop-shadow-md">Citros S.A.</span>
+                    <span class="text-[10px] uppercase tracking-widest text-[#a3e635] font-bold">Tecnología IoT</span>
+                </div>
+            </a>
+
+            <!-- Menú Desktop -->
+            <div class="hidden md:flex items-center gap-2">
+                <a href="index.html" class="nav-pill active">Inicio</a>
+                <a href="lusi.html" class="nav-pill">Soluciones</a>
+                <a href="equipo.html" class="nav-pill">Nosotros</a>
+                <a href="labs.html" class="nav-pill">I+D Labs</a>
+            </div>
+
+            <!-- Botón Contacto -->
+            <a href="mailto:hola.citros@gmail.com" class="hidden md:block px-6 py-2 rounded-full bg-white text-[#2D730D] font-bold text-sm hover:shadow-[0_0_20px_rgba(255,255,255,0.5)] transition">
+                Contacto
+            </a>
+
+            <!-- Botón Móvil -->
+            <button onclick="toggleMenu()" class="md:hidden text-white text-2xl">☰</button>
+        </div>
+    </nav>
+
+    <!-- MENÚ MÓVIL -->
+    <div id="mobile-menu" class="fixed inset-0 z-40 bg-[#1a3a05]/95 backdrop-blur-xl flex flex-col justify-center items-center gap-8 md:hidden">
+        <button onclick="toggleMenu()" class="absolute top-6 right-6 text-white/70 hover:text-white text-3xl">✕</button>
+        <a href="index.html" class="text-3xl font-bold text-white border-b-2 border-[#7DA819]">Inicio</a>
+        <a href="lusi.html" class="text-2xl text-white/80 hover:text-[#a3e635]">LUSI</a>
+        <a href="equipo.html" class="text-2xl text-white/80 hover:text-[#a3e635]">Equipo</a>
+        <a href="labs.html" class="text-2xl text-white/80 hover:text-[#a3e635]">Labs</a>
+    </div>
+
+    <main class="px-4">
+        
+        <!-- HERO SECTION -->
+        <section class="pt-48 pb-20 max-w-5xl mx-auto text-center min-h-[90vh] flex flex-col justify-center">
+            
+            <div class="animate-fade-in-up">
+                <!-- Badge Tecnológico -->
+                <div class="inline-flex items-center gap-3 px-5 py-2 rounded-full border border-white/30 bg-white/10 text-white text-xs font-bold uppercase tracking-widest mb-8 backdrop-blur-md shadow-lg hover:bg-white/20 transition cursor-default">
+                    <span class="relative flex h-2 w-2">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#a3e635] opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-2 w-2 bg-[#7DA819]"></span>
+                    </span>
+                    Ingeniería Mexicana de Vanguardia
+                </div>
+                
+                <h1 class="text-6xl md:text-8xl heading-font font-black mb-6 text-white leading-tight drop-shadow-xl">
+                    Innovación <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-[#a3e635] filter drop-shadow-lg">Urbana.</span>
+                </h1>
+
+                <p class="text-xl text-white/90 max-w-2xl mx-auto mb-12 font-medium leading-relaxed drop-shadow-md">
+                    Transformamos la infraestructura pública en redes inteligentes. Sistemas IoT eficientes desarrollados en San José Chiapa.
+                </p>
+
+                <div class="flex flex-col sm:flex-row justify-center gap-6">
+                    <!-- Botón Glossy Blanco (Estilo Aero) -->
+                    <a href="lusi.html" class="btn-glossy px-12 py-4 text-lg">
+                        Conoce el Proyecto
+                    </a>
+                    
+                    <a href="#adn" class="btn-outline px-12 py-4 text-lg">
+                        Nuestra Historia
+                    </a>
+                </div>
+            </div>
+
+            <!-- Panel de Datos Flotante -->
+            <div class="mt-24 glass-panel p-8 max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-around text-center md:text-left gap-8 transform hover:scale-[1.02] transition duration-500 cursor-default">
+                <div>
+                    <div class="text-4xl font-bold text-white drop-shadow-sm">100%</div>
+                    <div class="text-xs uppercase font-bold text-white/70 tracking-widest mt-1">Propiedad Intelectual</div>
+                </div>
+                <div class="h-12 w-px bg-white/30 hidden md:block"></div>
+                <div>
+                    <div class="text-4xl font-bold text-white drop-shadow-sm">IoT</div>
+                    <div class="text-xs uppercase font-bold text-white/70 tracking-widest mt-1">Conectividad Total</div>
+                </div>
+                <div class="h-12 w-px bg-white/30 hidden md:block"></div>
+                <div>
+                    <div class="text-4xl font-bold text-white drop-shadow-sm">BUAP</div>
+                    <div class="text-xs uppercase font-bold text-white/70 tracking-widest mt-1">Desarrollo Académico</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN ADN (Panel Glass Gigante) -->
+        <section id="adn" class="py-24 max-w-6xl mx-auto">
+            <div class="glass-panel p-10 md:p-16 relative overflow-hidden">
+                <!-- Luz decorativa interna -->
+                <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-white opacity-10 rounded-full blur-[120px] pointer-events-none -mr-20 -mt-20"></div>
+
+                <div class="grid md:grid-cols-2 gap-16 items-center relative z-10">
+                    <div>
+                        <h2 class="text-sm font-bold text-[#a3e635] uppercase tracking-widest mb-4 flex items-center gap-2">
+                            <span class="w-8 h-px bg-[#a3e635]"></span> Origen
+                        </h2>
+                        <h3 class="text-4xl heading-font font-bold mb-6 text-white drop-shadow-md">Sinergia Técnica</h3>
+                        <p class="text-white/90 text-lg leading-relaxed mb-8">
+                            Citros S.A. no es solo una idea, es ingeniería aplicada. Nacimos de la fusión estratégica de tres áreas del conocimiento en el <strong>Bachillerato Tecnológico</strong>:
+                        </p>
+                        
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-4 bg-white/5 p-3 rounded-xl border border-white/10 hover:bg-white/10 transition">
+                                <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-300 font-bold border border-blue-400/30">IT</div>
+                                <span class="text-white font-medium">Sistemas Informáticos (Software)</span>
+                            </div>
+                            <div class="flex items-center gap-4 bg-white/5 p-3 rounded-xl border border-white/10 hover:bg-white/10 transition">
+                                <div class="w-10 h-10 rounded-lg bg-amber-500/20 flex items-center justify-center text-amber-300 font-bold border border-amber-400/30">Au</div>
+                                <span class="text-white font-medium">Automatización (Hardware)</span>
+                            </div>
+                            <div class="flex items-center gap-4 bg-white/5 p-3 rounded-xl border border-white/10 hover:bg-white/10 transition">
+                                <div class="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center text-purple-300 font-bold border border-purple-400/30">Ges</div>
+                                <span class="text-white font-medium">Gestión Industrial (Procesos)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center md:text-left">
+                        <div class="glass-panel !bg-black/20 p-8 border-white/20 inline-block rotate-3 hover:rotate-0 transition duration-500">
+                            <div class="text-6xl mb-4 drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">🚀</div>
+                            <h4 class="text-2xl font-bold text-white mb-2">Visión 2030</h4>
+                            <p class="text-white/70 max-w-xs mx-auto md:mx-0">Convertir a Rafael Lara Grajales, San José Chiapa y la región en un referente de Smart City en México.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN PILARES (Grid) -->
+        <section class="py-20 max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-white drop-shadow-md">Nuestros Pilares</h2>
+                <div class="w-24 h-1 bg-white/30 mx-auto mt-4 rounded-full"></div>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div class="glass-panel p-8 text-center group">
+                    <div class="w-16 h-16 mx-auto mb-6 bg-white/10 rounded-2xl flex items-center justify-center text-3xl border border-white/20 group-hover:bg-white group-hover:text-[#2D730D] transition-all duration-300 shadow-lg">⚡</div>
+                    <h3 class="text-xl font-bold mb-3 text-white">Eficiencia</h3>
+                    <p class="text-white/70 text-sm leading-relaxed">Optimizamos recursos. Nuestros sistemas reducen el consumo energético sin sacrificar rendimiento.</p>
+                </div>
+                <!-- Card 2 -->
+                <div class="glass-panel p-8 text-center group">
+                    <div class="w-16 h-16 mx-auto mb-6 bg-white/10 rounded-2xl flex items-center justify-center text-3xl border border-white/20 group-hover:bg-white group-hover:text-[#0072ff] transition-all duration-300 shadow-lg">🌐</div>
+                    <h3 class="text-xl font-bold mb-3 text-white">Conectividad</h3>
+                    <p class="text-white/70 text-sm leading-relaxed">Rompemos la brecha digital. Llevamos acceso a internet a espacios públicos mediante infraestructura existente.</p>
+                </div>
+                <!-- Card 3 -->
+                <div class="glass-panel p-8 text-center group">
+                    <div class="w-16 h-16 mx-auto mb-6 bg-white/10 rounded-2xl flex items-center justify-center text-3xl border border-white/20 group-hover:bg-white group-hover:text-purple-600 transition-all duration-300 shadow-lg">🛠️</div>
+                    <h3 class="text-xl font-bold mb-3 text-white">Funcionalidad</h3>
+                    <p class="text-white/70 text-sm leading-relaxed">Soluciones prácticas y robustas. Hardware diseñado para durar y operar en condiciones reales.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA FINAL -->
+        <section class="py-20 text-center">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-4xl font-bold mb-6 text-white drop-shadow-md">Tecnología al servicio de la gente.</h2>
+                <p class="text-xl text-white/80 mb-10">Descubre LUSI, nuestro primer paso hacia la ciudad inteligente.</p>
+                <a href="lusi.html" class="btn-glossy px-12 py-5 text-xl inline-block text-[#2D730D] shadow-2xl hover:text-black">
+                    Explorar Proyecto LUSI
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center py-12 text-white/50 text-xs border-t border-white/10 bg-black/20 backdrop-blur-sm">
+        <div class="max-w-4xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p class="font-bold text-white uppercase tracking-widest">Citros S.A. de C.V.</p>
+            <p>&copy; 2025 - Desarrollado en San José Chiapa, Puebla.</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            document.getElementById('mobile-menu').classList.toggle('open');
+        }
+    </script>
+</body>
+</html>
+
+
+

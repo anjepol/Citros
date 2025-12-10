@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Labs | Citros S.A.</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;800&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* --- PALETA LABS (AZUL FUTURO) --- */
+        :root {
+            --labs-cyan: #00f2fe;
+            --labs-blue: #4facfe;
+            --labs-deep: #0072ff;
+            --text-main: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #020617; 
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        .heading-font { font-family: 'Outfit', sans-serif; }
+
+        /* --- FONDO AERO LABS --- */
+        .aero-bg {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2;
+            background: radial-gradient(circle at 50% 0%, #0f172a 0%, #000000 100%);
+        }
+
+        /* Red de Datos (Grid) */
+        .grid-overlay {
+            position: absolute; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 242, 254, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 242, 254, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+        }
+
+        /* Orbes de Energía */
+        .orb {
+            position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.4;
+            animation: float 20s infinite ease-in-out;
+        }
+        .orb-1 { top: -10%; left: 20%; width: 40vw; height: 40vw; background: var(--labs-deep); }
+        .orb-2 { bottom: -10%; right: -10%; width: 50vw; height: 50vw; background: var(--labs-cyan); opacity: 0.2; animation-delay: -5s; }
+
+        @keyframes float { 0%, 100% { transform: translate(0,0); } 50% { transform: translate(20px, -20px); } }
+
+        /* --- CRISTAL LABS --- */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 242, 254, 0.1); 
+            border-top: 1px solid rgba(0, 242, 254, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            border-radius: 24px;
+            transition: all 0.3s ease;
+        }
+        .glass-panel:hover {
+            transform: translateY(-5px);
+            border-color: var(--labs-cyan);
+            box-shadow: 0 0 30px rgba(0, 242, 254, 0.15);
+        }
+
+        /* Tarjeta de Prototipo */
+        .proto-card {
+            border: 2px dashed rgba(0, 242, 254, 0.3);
+            background: rgba(0, 242, 254, 0.02);
+        }
+        .proto-card:hover {
+            border-color: var(--labs-cyan);
+            background: rgba(0, 242, 254, 0.05);
+        }
+        
+        /* Tarjeta Completada */
+        .completed-card {
+            border: 2px solid rgba(76, 175, 80, 0.3);
+            background: rgba(76, 175, 80, 0.05);
+        }
+        .completed-card:hover {
+            border-color: #4ade80;
+            box-shadow: 0 0 20px rgba(74, 222, 128, 0.2);
+        }
+
+        /* --- UI ELEMENTS --- */
+        .btn-labs {
+            background: linear-gradient(180deg, #60efff 0%, var(--labs-cyan) 50%, var(--labs-blue) 51%, var(--labs-deep) 100%);
+            border: 1px solid #60efff;
+            color: white; font-weight: 700; text-shadow: 0 -1px 1px rgba(0,0,0,0.5);
+            border-radius: 99px;
+            box-shadow: 0 5px 15px rgba(0, 114, 255, 0.4);
+            position: relative; overflow: hidden; transition: filter 0.2s, transform 0.2s;
+        }
+        .btn-labs::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 45%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.1) 100%);
+            border-radius: 99px 99px 40px 40px;
+        }
+        .btn-labs:hover { filter: brightness(1.1); transform: scale(1.05); }
+
+        .nav-pill { padding: 0.5rem 1.2rem; border-radius: 99px; font-weight: 600; font-size: 0.9rem; color: #94a3b8; transition: all 0.2s; }
+        .nav-pill:hover, .nav-pill.active { background: rgba(0, 242, 254, 0.1); color: white; box-shadow: 0 0 10px rgba(0, 242, 254, 0.2); border: 1px solid rgba(0,242,254,0.3); }
+
+        /* Mobile Menu */
+        #mobile-menu { transition: transform 0.3s; transform: translateX(100%); }
+        #mobile-menu.open { transform: translateX(0); }
+    </style>
+</head>
+<body>
+
+    <!-- FONDO -->
+    <div class="aero-bg">
+        <div class="grid-overlay"></div>
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+
+    <!-- NAVEGACIÓN -->
+    <nav class="fixed top-0 w-full z-50 border-b border-white/10 bg-[#020617]/80 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2 group">
+                <div class="w-10 h-10">
+                    <img src="logoazul.png" alt="logo azul">
+                </div>
+                <span class="font-bold heading-font text-xl tracking-tight text-white">Citros S.A.</span>
+            </a>
+            <div class="hidden md:flex gap-1">
+                <a href="index.html" class="nav-pill">Inicio</a>
+                <a href="lusi.html" class="nav-pill hover:text-cyan-200">Proyecto LUSI</a>
+                <a href="equipo.html" class="nav-pill hover:text-white">Equipo</a>
+                <a href="labs.html" class="nav-pill active">Labs</a>
+            </div>
+            <button onclick="toggleMenu()" class="md:hidden text-cyan-400 text-2xl">☰</button>
+        </div>
+    </nav>
+
+    <!-- MENÚ MÓVIL -->
+    <div id="mobile-menu" class="fixed inset-0 z-40 bg-[#020617] flex flex-col justify-center items-center gap-8 md:hidden">
+        <button onclick="toggleMenu()" class="absolute top-6 right-6 text-white/70 hover:text-white text-3xl">✕</button>
+        <a href="index.html" class="text-2xl text-gray-400 hover:text-white">Inicio</a>
+        <a href="lusi.html" class="text-2xl text-gray-400 hover:text-cyan-300">LUSI</a>
+        <a href="equipo.html" class="text-2xl text-gray-400 hover:text-white">Equipo</a>
+        <a href="labs.html" class="text-3xl font-bold text-[#00f2fe] border-b-2 border-[#00f2fe]">Labs</a>
+    </div>
+
+    <main class="px-4 pt-32 pb-20">
+        
+        <!-- HEADER LABS -->
+        <section class="text-center max-w-4xl mx-auto mb-20">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-cyan-500/30 bg-cyan-900/20 text-cyan-300 text-xs font-bold uppercase tracking-widest mb-6 backdrop-blur-sm">
+                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                I+D+i (Investigación, Desarrollo e Innovación)
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl heading-font font-black mb-6 text-white drop-shadow-lg">
+                Citros <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#00f2fe] to-[#4facfe]">Labs</span>
+            </h1>
+            
+            <p class="text-lg text-blue-200/80 max-w-2xl mx-auto font-light leading-relaxed">
+                El motor creativo de la empresa. Aquí es donde probamos nuevas ideas, quemamos circuitos y escribimos el código del mañana.
+            </p>
+        </section>
+
+        <!-- SECCIÓN 1: PORTAFOLIO DE PROYECTOS -->
+        <section class="max-w-6xl mx-auto mb-24">
+            <h2 class="text-2xl font-bold text-white mb-8 border-l-4 border-cyan-500 pl-4">Proyectos Destacados</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                
+                <!-- PROYECTO 1: LUSI (ACTIVO) -->
+                <div class="glass-panel proto-card p-8 group relative overflow-hidden">
+                    <div class="absolute top-4 right-4 text-[10px] font-bold border border-cyan-500/50 text-cyan-400 px-2 py-1 rounded uppercase tracking-wider bg-cyan-900/20">Flagship</div>
+                    
+                    <div class="flex items-start gap-6">
+                        <div class="w-16 h-16 rounded-2xl bg-cyan-500/10 flex items-center justify-center text-3xl flex-shrink-0 border border-cyan-500/20 group-hover:border-cyan-400 group-hover:shadow-[0_0_15px_#00f2fe] transition duration-300">
+                            💡
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-white mb-2">Proyecto LUSI</h3>
+                            <p class="text-blue-200/70 text-sm mb-4 leading-relaxed">
+                                Sistema integral de gestión de alumbrado público. Integra hardware de potencia 110V y software de telegestión en la nube.
+                            </p>
+                            
+                            <!-- Tech Stack Mini -->
+                            <div class="flex gap-2 mb-4">
+                                <span class="text-[10px] bg-white/10 px-2 py-1 rounded text-gray-300">ESP32</span>
+                                <span class="text-[10px] bg-white/10 px-2 py-1 rounded text-gray-300">C++</span>
+                                <span class="text-[10px] bg-white/10 px-2 py-1 rounded text-gray-300">WebSockets</span>
+                            </div>
+
+                            <div class="w-full bg-white/5 rounded-full h-1.5 mb-2">
+                                <div class="bg-gradient-to-r from-cyan-500 to-blue-600 h-1.5 rounded-full relative overflow-hidden" style="width: 90%">
+                                    <div class="absolute inset-0 bg-white/30 w-full h-full animate-pulse"></div>
+                                </div>
+                            </div>
+                            <div class="text-xs text-cyan-400 font-mono">Estado: Despliegue Beta</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PROYECTO 2: ROVER WIFI (LEGADO) -->
+                <div class="glass-panel completed-card p-8 group relative overflow-hidden">
+                    <div class="absolute top-4 right-4 text-[10px] font-bold border border-green-500/50 text-green-400 px-2 py-1 rounded uppercase tracking-wider bg-green-900/20">Finalizado</div>
+                    
+                    <div class="flex items-start gap-6">
+                        <div class="w-16 h-16 rounded-2xl bg-green-500/10 flex items-center justify-center text-3xl flex-shrink-0 border border-green-500/20 group-hover:border-green-400 group-hover:shadow-[0_0_15px_#4ade80] transition duration-300">
+                            🚗
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-white mb-2">Citros Rover v1</h3>
+                            <p class="text-blue-200/70 text-sm mb-4 leading-relaxed">
+                                Vehículo robótico a escala controlado vía WiFi. Desarrollado como prueba de concepto para latencia baja en redes locales y control de motores DC.
+                            </p>
+                            
+                            <div class="flex gap-2 mb-4">
+                                <span class="text-[10px] bg-white/10 px-2 py-1 rounded text-gray-300">NodeMCU</span>
+                                <span class="text-[10px] bg-white/10 px-2 py-1 rounded text-gray-300">H-Bridge</span>
+                                <span class="text-[10px] bg-white/10 px-2 py-1 rounded text-gray-300">UDP</span>
+                            </div>
+
+                            <div class="w-full bg-white/5 rounded-full h-1.5 mb-2">
+                                <div class="bg-gradient-to-r from-green-500 to-emerald-400 h-1.5 rounded-full" style="width: 100%"></div>
+                            </div>
+                            <div class="text-xs text-green-400 font-mono">Estado: Operativo 100%</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECCIÓN 2: LÍNEAS DE INVESTIGACIÓN (NUEVO) -->
+        <section class="max-w-6xl mx-auto mb-24">
+            <h2 class="text-2xl font-bold text-white mb-8 border-l-4 border-blue-500 pl-4">Áreas de Dominio</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="glass-panel p-6 hover:bg-white/5 transition text-center md:text-left">
+                    <div class="text-3xl mb-4">📡</div>
+                    <h4 class="font-bold text-white mb-2">Internet de las Cosas (IoT)</h4>
+                    <p class="text-sm text-gray-400">Interconexión de objetos cotidianos mediante protocolos MQTT y HTTP.</p>
+                </div>
+                <div class="glass-panel p-6 hover:bg-white/5 transition text-center md:text-left">
+                    <div class="text-3xl mb-4">⚡</div>
+                    <h4 class="font-bold text-white mb-2">Electrónica de Potencia</h4>
+                    <p class="text-sm text-gray-400">Control seguro de altos voltajes (110V/220V) mediante microcontroladores.</p>
+                </div>
+                <div class="glass-panel p-6 hover:bg-white/5 transition text-center md:text-left">
+                    <div class="text-3xl mb-4">🕸️</div>
+                    <h4 class="font-bold text-white mb-2">Redes Mesh</h4>
+                    <p class="text-sm text-gray-400">Creación de redes descentralizadas para ampliar la cobertura WiFi.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 3: ARSENAL TECNOLÓGICO (NUEVO) -->
+        <section class="max-w-4xl mx-auto mb-24 text-center">
+            <h2 class="text-2xl font-bold text-white mb-8">Stack Tecnológico</h2>
+            <div class="glass-panel p-8 flex flex-wrap justify-center gap-8 items-center">
+                <!-- Iconos Simples (Texto) -->
+                <div class="text-center group">
+                    <div class="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center text-2xl mb-2 group-hover:bg-[#00979d]/20 transition">♾️</div>
+                    <span class="text-xs text-gray-400 font-mono">Arduino</span>
+                </div>
+                <div class="text-center group">
+                    <div class="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center text-2xl mb-2 group-hover:bg-[#61dafb]/20 transition">⚛️</div>
+                    <span class="text-xs text-gray-400 font-mono">React/Web</span>
+                </div>
+                <div class="text-center group">
+                    <div class="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center text-2xl mb-2 group-hover:bg-[#ff4444]/20 transition">🔥</div>
+                    <span class="text-xs text-gray-400 font-mono">Firebase</span>
+                </div>
+                <div class="text-center group">
+                    <div class="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center text-2xl mb-2 group-hover:bg-[#3776ab]/20 transition">🐍</div>
+                    <span class="text-xs text-gray-400 font-mono">Python</span>
+                </div>
+                <div class="text-center group">
+                    <div class="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center text-2xl mb-2 group-hover:bg-white/20 transition">🧊</div>
+                    <span class="text-xs text-gray-400 font-mono">3D Print</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 4: NUESTRO PROCESO (NUEVO) -->
+        <section class="max-w-6xl mx-auto mb-20">
+            <div class="glass-panel p-10 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl"></div>
+                <h2 class="text-2xl font-bold text-white mb-6 relative z-10">Metodología Citros</h2>
+                <div class="flex flex-col md:flex-row gap-6 relative z-10">
+                    <div class="flex-1 border-l-2 border-cyan-500/30 pl-4">
+                        <span class="text-xs font-bold text-cyan-400 uppercase">Fase 1</span>
+                        <h4 class="font-bold text-white mt-1">Análisis</h4>
+                        <p class="text-sm text-gray-400 mt-2">Identificamos problemas reales en nuestra comunidad (San José Chiapa).</p>
+                    </div>
+                    <div class="flex-1 border-l-2 border-blue-500/30 pl-4">
+                        <span class="text-xs font-bold text-blue-400 uppercase">Fase 2</span>
+                        <h4 class="font-bold text-white mt-1">Prototipado Rápido</h4>
+                        <p class="text-sm text-gray-400 mt-2">Usamos impresión 3D y placas de desarrollo para fallar rápido y aprender.</p>
+                    </div>
+                    <div class="flex-1 border-l-2 border-indigo-500/30 pl-4">
+                        <span class="text-xs font-bold text-indigo-400 uppercase">Fase 3</span>
+                        <h4 class="font-bold text-white mt-1">Implementación</h4>
+                        <p class="text-sm text-gray-400 mt-2">Pruebas de campo en condiciones reales (lluvia, sol, usuarios).</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA UNIRSE -->
+        <section class="py-20 text-center">
+            <div class="max-w-2xl mx-auto">
+                <h2 class="text-2xl font-bold text-white mb-4">¿Tienes una idea?</h2>
+                <p class="text-gray-400 mb-8">En Citros Labs siempre estamos buscando el próximo desafío.</p>
+                <a href="mailto:labs@citros.mx" class="btn-labs px-8 py-3 text-sm uppercase tracking-wider">
+                    Contactar I+D
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center py-10 text-gray-600 text-xs border-t border-white/5 bg-black/60">
+        <p class="mb-2 font-bold text-[#00f2fe] uppercase tracking-widest">Citros S.A. de C.V.</p>
+        <p>&copy; 2025 - División de Investigación y Desarrollo.</p>
+    </footer>
+
+    <script>
+        function toggleMenu() { document.getElementById('mobile-menu').classList.toggle('open'); }
+    </script>
+</body>
+</html>
+

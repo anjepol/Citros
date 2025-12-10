@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asignación de Roles | Citros S.A.</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glass-bg: rgba(15, 23, 42, 0.9);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --primary: #f43f5e;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(circle at 50% 10%, #1e1b4b 0%, #000000 100%);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .heading-font { font-family: 'Outfit', sans-serif; }
+
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border-radius: 24px;
+        }
+
+        .glass-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        .glass-input:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #f43f5e;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(244, 63, 94, 0.2);
+        }
+
+        .option-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .option-card:hover {
+            background: rgba(244, 63, 94, 0.1);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .option-card.selected {
+            background: linear-gradient(135deg, rgba(244, 63, 94, 0.2) 0%, rgba(159, 18, 57, 0.2) 100%);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 1px var(--primary);
+        }
+
+        .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .hidden { display: none !important; }
+
+        /* MENU NAV STYLES */
+        #nav-menu { transition: transform 0.3s ease; transform: translateX(100%); }
+        #nav-menu.open { transform: translateX(0); }
+    </style>
+</head>
+<body class="flex items-center justify-center p-4 min-h-screen relative">
+
+    <!-- BOTÓN DE MENÚ (NUEVO) -->
+    <button onclick="toggleNav()" class="fixed top-6 right-6 z-50 p-2 text-white hover:text-rose-400 transition">
+        <svg class="w-8 h-8 drop-shadow-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+    </button>
+
+    <!-- MENÚ NAVEGACIÓN FULLSCREEN (NUEVO) -->
+    <div id="nav-menu" class="fixed inset-0 z-40 bg-black/95 backdrop-blur-xl flex flex-col justify-center items-center gap-8">
+        <button onclick="toggleNav()" class="absolute top-6 right-6 text-white/70 hover:text-white text-3xl">✕</button>
+        <a href="index.html" class="text-2xl text-gray-400 hover:text-white transition">Inicio</a>
+        <a href="lusi.html" class="text-2xl text-gray-400 hover:text-rose-400 transition">Proyecto LUSI</a>
+        <a href="equipo.html" class="text-3xl font-bold text-rose-500 border-b-2 border-rose-500">Equipo</a>
+        <a href="labs.html" class="text-2xl text-gray-400 hover:text-white transition">Labs</a>
+    </div>
+
+    <div class="w-full max-w-4xl glass-panel p-8 md:p-12 relative overflow-hidden">
+        
+        <!-- HEADER -->
+        <div class="flex justify-between items-center mb-8 border-b border-white/10 pb-4">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-rose-600 flex items-center justify-center font-bold text-white shadow-lg shadow-rose-500/30">C</div>
+                <div>
+                    <h2 class="text-sm font-bold tracking-widest uppercase text-white">Citros S.A.</h2>
+                    <p class="text-[10px] text-gray-400 uppercase">Dual-Role System v6.5</p>
+                </div>
+            </div>
+            <div id="progress-indicator" class="text-xs font-mono text-rose-400 hidden">0%</div>
+        </div>
+
+        <!-- 1. LOGIN -->
+        <div id="login-screen" class="text-center fade-in">
+            <h1 class="text-3xl md:text-4xl heading-font font-bold mb-2 text-white">Registro de Personal</h1>
+            <p class="text-gray-400 text-sm mb-8">Ingresa tus datos para determinar tus puestos (Principal y Secundario).</p>
+            
+            <div class="max-w-sm mx-auto space-y-4 mb-8 text-left">
+                <div>
+                    <label class="text-xs text-gray-500 uppercase font-bold ml-1">Nombre Completo</label>
+                    <input type="text" id="user-name" class="w-full p-3 rounded-xl glass-input mt-1 placeholder-gray-600" placeholder="Ej. Juan Pérez">
+                </div>
+                <div>
+                    <label class="text-xs text-gray-500 uppercase font-bold ml-1">Matrícula BUAP</label>
+                    <input type="text" id="user-id" class="w-full p-3 rounded-xl glass-input mt-1 placeholder-gray-600" placeholder="Ej. 202312345">
+                </div>
+            </div>
+
+            <button onclick="validateAndStart()" class="px-10 py-3 bg-white text-black font-bold rounded-full hover:bg-rose-50 transition transform hover:scale-105 shadow-xl w-full max-w-sm">
+                Comenzar Evaluación
+            </button>
+            <p id="error-msg" class="text-rose-500 text-xs mt-3 hidden">Por favor completa ambos campos.</p>
+        </div>
+
+        <!-- 2. QUIZ -->
+        <div id="quiz-screen" class="hidden flex-col h-full min-h-[400px]">
+            <div class="flex-grow flex flex-col justify-center">
+                <h2 id="q-text" class="text-xl md:text-2xl font-medium text-white mb-8 leading-snug"></h2>
+                <div id="options-list" class="space-y-3"></div>
+            </div>
+        </div>
+
+        <!-- 3. RESULTADOS (DUAL) -->
+        <div id="result-screen" class="hidden text-center fade-in">
+            <div class="mb-6 border-b border-white/10 pb-4 flex justify-between items-end">
+                <div class="text-left">
+                    <p class="text-gray-500 text-xs uppercase tracking-widest mb-1">Informe Final para:</p>
+                    <h2 id="final-name" class="text-xl font-bold text-white">Nombre del Usuario</h2>
+                </div>
+                <p id="final-id" class="text-sm text-rose-400 font-mono">ID: 00000000</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-6 mb-8">
+                <!-- ROL PRINCIPAL -->
+                <div class="bg-gradient-to-br from-gray-800/80 to-transparent border border-rose-500/30 rounded-2xl p-6 relative overflow-hidden text-left group hover:border-rose-500/60 transition">
+                    <div class="absolute top-0 right-0 bg-rose-600 text-white text-[10px] font-bold px-3 py-1 rounded-bl-lg uppercase">Puesto Principal</div>
+                    
+                    <div id="p-icon" class="text-5xl mb-4 transform group-hover:scale-110 transition duration-300"></div>
+                    <h1 id="p-title" class="text-xl font-bold text-white mb-1 heading-font"></h1>
+                    <p id="p-dept" class="text-rose-300 text-xs font-bold uppercase tracking-wider mb-4"></p>
+                    
+                    <div class="bg-black/30 rounded-lg p-3 border border-white/5 mb-4 min-h-[80px]">
+                        <p id="p-desc" class="text-gray-300 text-xs leading-relaxed italic"></p>
+                    </div>
+
+                    <h4 class="text-[10px] text-gray-500 uppercase font-bold mb-2">Responsabilidades Clave:</h4>
+                    <ul id="p-tasks" class="text-xs text-gray-300 space-y-1 list-disc list-inside"></ul>
+                </div>
+
+                <!-- ROL SECUNDARIO -->
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-6 relative text-left flex flex-col">
+                    <div class="absolute top-0 right-0 bg-gray-600 text-white text-[10px] font-bold px-3 py-1 rounded-bl-lg uppercase">Puesto Secundario</div>
+                    
+                    <div id="s-icon" class="text-4xl mb-4 opacity-70"></div>
+                    <h1 id="s-title" class="text-lg font-bold text-gray-200 mb-1 heading-font"></h1>
+                    <p class="text-gray-500 text-xs font-bold uppercase tracking-wider mb-4">Apoyo Operativo</p>
+                    
+                    <p class="text-gray-400 text-xs mb-4 flex-grow">Este es tu rol de soporte cuando termines tus tareas principales.</p>
+
+                    <h4 class="text-[10px] text-gray-500 uppercase font-bold mb-2">Tareas de Apoyo:</h4>
+                    <ul id="s-tasks" class="text-xs text-gray-400 space-y-1 list-disc list-inside"></ul>
+                </div>
+            </div>
+
+            <!-- CLAUSULA -->
+            <div class="bg-blue-900/20 border border-blue-500/30 p-4 rounded-xl text-left flex gap-4 items-center">
+                <div class="text-2xl">🤝</div>
+                <div>
+                    <h4 class="text-blue-300 font-bold text-sm">Cláusula de Equipo</h4>
+                    <p class="text-blue-100/70 text-xs mt-1">
+                        Tener un puesto directivo <strong>NO te exime del trabajo manual</strong>. Si hay que cargar, lijar o limpiar, lo hacemos todos. El éxito de LUSI depende de la humildad y el apoyo mutuo.
+                    </p>
+                </div>
+            </div>
+
+            <!-- CEO TIP (Oculto) -->
+            <div id="ceo-tip-box" class="mt-4 p-3 bg-yellow-900/20 border border-yellow-600/30 rounded text-[10px] text-yellow-200 text-left hidden">
+                <strong>👑 Nota para el CEO:</strong> <span id="ceo-tip"></span>
+            </div>
+
+            <button onclick="location.reload()" class="mt-8 text-gray-500 hover:text-white text-sm underline transition">
+                Siguiente Integrante
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        // TOGGLE NAV (NUEVO)
+        function toggleNav() {
+            document.getElementById('nav-menu').classList.toggle('open');
+        }
+
+        let userData = { name: "", id: "" };
+
+        function validateAndStart() {
+            const name = document.getElementById("user-name").value.trim();
+            const id = document.getElementById("user-id").value.trim();
+
+            if (name === "" || id === "") {
+                document.getElementById("error-msg").classList.remove("hidden");
+                return;
+            }
+            userData.name = name;
+            userData.id = id;
+            
+            document.getElementById("login-screen").classList.add("hidden");
+            document.getElementById("quiz-screen").classList.remove("hidden");
+            document.getElementById("quiz-screen").classList.add("flex");
+            document.getElementById("progress-indicator").classList.remove("hidden");
+            loadQuestion();
+        }
+
+        // --- ROLES ---
+        const ROLES = {
+            CEO: {
+                title: "Director General",
+                dept: "Dirección",
+                icon: "🦁",
+                desc: "Liderazgo natural. Asumes la responsabilidad final y la estrategia.",
+                tasks: ["Estrategia", "Pitch", "Crisis"],
+                ceoTip: "Vigila que delegue y no se queme."
+            },
+            COO: {
+                title: "Director de Operaciones",
+                dept: "Dirección",
+                icon: "⏱️",
+                desc: "Organización pura. Controlas el tiempo y los recursos.",
+                tasks: ["Cronograma", "Compras", "Docs"],
+                ceoTip: "Tu mano derecha para el orden."
+            },
+            CHIEF_ENG: {
+                title: "Ingeniero en Jefe",
+                dept: "Gerencia Técnica",
+                icon: "⚡",
+                desc: "Responsable de que el sistema funcione técnicamente.",
+                tasks: ["Arquitectura", "Código", "Seguridad"],
+                ceoTip: "Apóyalo con herramientas."
+            },
+            HEAD_DESIGN: {
+                title: "Gerente de Producto",
+                dept: "Gerencia Creativa",
+                icon: "🎨",
+                desc: "Responsable de la imagen y la experiencia visual.",
+                tasks: ["Diseño Web", "Marca", "UX"],
+                ceoTip: "Dale libertad creativa."
+            },
+            TECH_SPECIALIST: {
+                title: "Técnico Especialista",
+                dept: "Operaciones",
+                icon: "🛠️",
+                desc: "Ejecución precisa. Construcción física y montaje.",
+                tasks: ["Soldadura", "Armado", "Pruebas"],
+                ceoTip: "Instrucciones claras y directas."
+            },
+            DIGITAL_ASSISTANT: {
+                title: "Auxiliar Digital",
+                dept: "Operaciones",
+                icon: "💻",
+                desc: "Apoyo en tareas digitales y pruebas de usuario.",
+                tasks: ["Multimedia", "Textos", "QA Web"],
+                ceoTip: "Supervisión constante."
+            }
+        };
+
+        const questions = [
+            {
+                text: "Te encuentras un error difícil. ¿Qué haces?",
+                options: [
+                    { txt: "Me frustro y espero ayuda.", type: "BLOCK", score: 2 },
+                    { txt: "Investigo hasta resolverlo.", type: "LEAD", score: 2 },
+                    { txt: "Pido ayuda al grupo.", type: "SUPPORT", score: 2 }
+                ]
+            },
+            {
+                text: "¿Qué actividad prefieres EVITAR? (Veto)",
+                options: [
+                    { txt: "Dirigir personas.", veto: "CEO" },
+                    { txt: "Trabajo manual (soldar).", veto: "HARDWARE" },
+                    { txt: "Programar lógica.", veto: "SOFTWARE" },
+                    { txt: "Hacer documentos.", veto: "DOCS" }
+                ]
+            },
+            {
+                text: "Queda poco tiempo. ¿Cómo reaccionas?",
+                options: [
+                    { txt: "Me bloqueo.", type: "BLOCK", score: 2 },
+                    { txt: "Hago lo que me digan.", type: "SUPPORT", score: 3 },
+                    { txt: "Organizo al equipo.", type: "LEAD", score: 3 }
+                ]
+            },
+            {
+                text: "¿Cómo te sientes más útil?",
+                options: [
+                    { txt: "Con instrucciones claras.", type: "SUPPORT", score: 4 },
+                    { txt: "Diseñando la solución.", type: "LEAD", score: 3 },
+                    { txt: "Organizando recursos.", type: "MGMT", score: 3 }
+                ]
+            },
+            {
+                text: "Preferencia de área técnica:",
+                options: [
+                    { txt: "Hardware (Cables).", area: "HARDWARE" },
+                    { txt: "Diseño (Web).", area: "DESIGN" },
+                    { txt: "Gestión (Costos).", area: "MGMT" },
+                    { txt: "Lo que sea.", area: "ANY" }
+                ]
+            }
+        ];
+
+        let currentQ = 0;
+        let profile = { proactivity: 0, supportTendency: 0, veto: "", area: "" };
+
+        function loadQuestion() {
+            const q = questions[currentQ];
+            document.getElementById("q-text").innerText = q.text;
+            document.getElementById("progress-indicator").innerText = `${Math.round((currentQ / questions.length) * 100)}%`;
+            const list = document.getElementById("options-list");
+            list.innerHTML = "";
+            q.options.forEach(opt => {
+                const btn = document.createElement("div");
+                btn.className = "option-card p-4 rounded-xl flex items-center gap-4 group";
+                btn.innerHTML = `<span class="text-gray-300 font-light group-hover:text-white">${opt.txt}</span>`;
+                btn.onclick = () => selectOption(btn, opt);
+                list.appendChild(btn);
+            });
+        }
+
+        function selectOption(btn, data) {
+            if (data.type === "LEAD") profile.proactivity += data.score;
+            if (data.type === "MGMT") profile.proactivity += data.score; 
+            if (data.type === "BLOCK") profile.proactivity -= data.score; 
+            if (data.type === "SUPPORT") profile.supportTendency += data.score;
+            if (data.veto) profile.veto = data.veto;
+            if (data.area) profile.area = data.area;
+
+            btn.classList.add("selected");
+            setTimeout(() => {
+                currentQ++;
+                if (currentQ < questions.length) loadQuestion();
+                else calculateRole();
+            }, 300);
+        }
+
+        function calculateRole() {
+            let primary = "";
+            let secondary = "";
+
+            // 1. Determinar PRIMARY
+            if (profile.proactivity < 0) { // Bloqueo
+                primary = (profile.area === "DESIGN" || profile.area === "ANY") ? "DIGITAL_ASSISTANT" : "TECH_SPECIALIST";
+            } else if (profile.supportTendency > 4) { // Prefiere soporte
+                primary = (profile.area === "DESIGN") ? "DIGITAL_ASSISTANT" : "TECH_SPECIALIST";
+            } else { // Líder
+                if (profile.area === "HARDWARE" && profile.veto !== "HARDWARE") primary = "CHIEF_ENG";
+                else if (profile.area === "DESIGN" && profile.veto !== "SOFTWARE") primary = "HEAD_DESIGN";
+                else if (profile.area === "MGMT" && profile.veto !== "DOCS") primary = "COO";
+                else if (profile.veto !== "CEO") primary = "CEO";
+                else primary = "COO"; 
+            }
+
+            // 2. Determinar SECONDARY (Rol opuesto o complementario)
+            if (primary === "CEO" || primary === "COO") {
+                // Si es directivo, su secundario debe ser algo operativo útil
+                secondary = (profile.area === "HARDWARE") ? "TECH_SPECIALIST" : "DIGITAL_ASSISTANT";
+            } else if (primary === "CHIEF_ENG") {
+                secondary = "DIGITAL_ASSISTANT"; // Ayuda en cosas visuales básicas
+            } else if (primary === "HEAD_DESIGN") {
+                secondary = "DIGITAL_ASSISTANT"; // Carga operativa de su misma área
+            } else {
+                // Si es operativo, su secundario es otra área operativa
+                secondary = (primary === "TECH_SPECIALIST") ? "DIGITAL_ASSISTANT" : "TECH_SPECIALIST";
+            }
+
+            showResults(primary, secondary);
+        }
+
+        function showResults(pKey, sKey) {
+            document.getElementById("quiz-screen").classList.add("hidden");
+            document.getElementById("quiz-screen").classList.remove("flex");
+            document.getElementById("result-screen").classList.remove("hidden");
+            document.getElementById("progress-indicator").innerText = "100%";
+
+            document.getElementById("final-name").innerText = userData.name;
+            document.getElementById("final-id").innerText = `ID: ${userData.id}`;
+
+            // Render Primary
+            const pRole = ROLES[pKey];
+            document.getElementById("p-icon").innerText = pRole.icon;
+            document.getElementById("p-title").innerText = pRole.title;
+            document.getElementById("p-dept").innerText = pRole.dept;
+            document.getElementById("p-desc").innerText = pRole.desc;
+            const pList = document.getElementById("p-tasks");
+            pRole.tasks.forEach(t => pList.innerHTML += `<li>${t}</li>`);
+            
+            // Render Secondary
+            const sRole = ROLES[sKey];
+            document.getElementById("s-icon").innerText = sRole.icon;
+            document.getElementById("s-title").innerText = sRole.title;
+            const sList = document.getElementById("s-tasks");
+            sRole.tasks.forEach(t => sList.innerHTML += `<li>${t}</li>`);
+
+            // CEO Tip
+            document.getElementById("ceo-tip").innerText = pRole.ceoTip;
+            document.getElementById("ceo-tip-box").classList.remove("hidden");
+        }
+    </script>
+</body>
+</html>
+
